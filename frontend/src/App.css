@@ -1,0 +1,129 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 85svh;
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.chat-title {
+  text-align: center;
+  margin: 24px 0 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+
+.chat-empty {
+  margin: auto;
+  color: var(--text);
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  line-height: 145%;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  border: 1px solid var(--accent-border);
+}
+
+.chat-bubble.bot {
+  align-self: flex-start;
+  background: var(--code-bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+}
+
+.chat-bubble.pending {
+  color: var(--text);
+}
+
+.chat-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 12px 24px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input-line {
+  display: flex;
+  gap: 12px;
+}
+
+.chat-textarea {
+  font: inherit;
+  font-size: 18px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  resize: vertical;
+  min-height: 90px;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.chat-input {
+  flex-grow: 1;
+  font: inherit;
+  font-size: 18px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.chat-send {
+  font: inherit;
+  font-size: 18px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  color: var(--accent);
+  background: var(--accent-bg);
+  cursor: pointer;
+  transition: border-color 0.3s;
+
+  &:hover:not(:disabled) {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
