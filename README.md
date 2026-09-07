@@ -7,7 +7,7 @@ An AI-powered notes generator. Paste in a lecture transcript or upload a PDF, te
 ## Screenshots
 
 ### Generating notes from pasted text
-![Pasted Text Example](screnshots/DOCSTEST.jpg)
+![Pasted Text Example](screenshots/DOCSTEST.jpg)
 
 ### Generating notes from an uploaded PDF
 ![PDF Upload Example](screenshots/PDFTEST.jpg)
