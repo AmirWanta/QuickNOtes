@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+import io
+
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from openai import OpenAI
+from pypdf import PdfReader
 import chromadb
 import uuid
 
@@ -21,12 +24,12 @@ class NotesRequest(BaseModel):
     document_text: str
     topic: str
 
-@app.post("/generate_notes")
-def generate_notes(payload: NotesRequest):
+def extract_text_from_pdf(pdf_bytes: bytes) -> str:
+    reader = PdfReader(io.BytesIO(pdf_bytes))
+    pages = [page.extract_text() or "" for page in reader.pages]
+    return "\n".join(pages)
 
-    document_text = payload.document_text
-    topic = payload.topic
-
+def build_notes(document_text: str, topic: str) -> str:
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 10)
     texts = text_splitter.split_text(document_text)
 
@@ -68,7 +71,24 @@ def generate_notes(payload: NotesRequest):
         input = input_list,
     )
 
-    return {"notes" : response.output_text}
+    return response.output_text
+
+@app.post("/generate_notes")
+def generate_notes(payload: NotesRequest):
+    return {"notes": build_notes(payload.document_text, payload.topic)}
+
+@app.post("/generate_notes_from_pdf")
+async def generate_notes_from_pdf(topic: str = Form(...), file: UploadFile = File(...)):
+    if file.content_type != "application/pdf":
+        raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
+
+    pdf_bytes = await file.read()
+    document_text = extract_text_from_pdf(pdf_bytes)
+
+    if not document_text.strip():
+        raise HTTPException(status_code=400, detail="Could not extract any text from the PDF")
+
+    return {"notes": build_notes(document_text, topic)}
 
 if __name__ == "__main__":
     import uvicorn
