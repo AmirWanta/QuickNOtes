@@ -18,7 +18,34 @@ export async function getBotReply(documentText, topic) {
     console.log('Success: ', data)
 
     return data.notes
-    
+
+  } catch (error) {
+    console.log('Error', error);
+  }
+
+}
+
+export async function getBotReplyFromPdf(file, topic) {
+
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('topic', topic)
+
+    const response = await fetch('http://127.0.0.1:8000/generate_notes_from_pdf', {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (!response.ok) {
+      throw new Error("Error")
+    }
+
+    const data = await response.json();
+    console.log('Success: ', data)
+
+    return data.notes
+
   } catch (error) {
     console.log('Error', error);
   }
